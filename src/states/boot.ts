@@ -15,7 +15,7 @@ export default class Boot extends Phaser.State {
         // this.input.maxPointers = 1;
 
         this.game.scale.scaleMode= Phaser.ScaleManager.USER_SCALE;
-        this.game.scale.setUserScale(2, 2);
+        this.game.scale.setUserScale(1.6, 1.6);
 
         this.game.renderer.renderSession.roundPixels = true;
         Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
@@ -43,6 +43,6 @@ export default class Boot extends Phaser.State {
            \nSOUND_EXTENSIONS_PREFERENCE. ${SOUND_EXTENSIONS_PREFERENCE}`
         );
 
-        this.game.state.start('title');
+        this.game.state.start('game');
     }
 }
