@@ -197,8 +197,6 @@ export namespace Images {
         static getPNG(): string { return require('assets/images/nge2logo.png'); }
     }
     export class ImagesObjectTile {
-        static getName(): string { return 'object_tile'; }
-
         static getPNG(): string { return require('assets/images/object_tile.png'); }
     }
     export class ImagesPauseSel {
