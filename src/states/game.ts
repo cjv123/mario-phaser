@@ -4,14 +4,23 @@ export default class Game extends Phaser.State{
     private hero:Hero=null;
     private map:Phaser.Tilemap=null;
     private mapLayerFloor:Phaser.TilemapLayer=null;
+    private exitKey:Phaser.Key=null;
 
     public preload(){
         this.game.load.spritesheet("hero",require("assets/images/hero.png"),16,31,11);
+        this.game.load.spritesheet("heroball",require("assets/images/heroball.png"),16,16,4);
+        this.game.load.spritesheet("flyman",require("assets/images/flyman2.png"),24,20,4);
         this.game.load.tilemap("map",require("assets/tilemaps/mapCSV_lv1.csv"),null,Phaser.Tilemap.CSV);
         this.game.load.image("tiles",require("assets/images/map.png"));
     }
 
+    private setupKey(){
+        this.exitKey = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
+        this.game.input.keyboard.addKeyCapture(Phaser.KeyCode.ESC);
+    }
+
     public create(){
+        this.setupKey();
         this.stage.setBackgroundColor('rgb(168,224,248)');
 
         this.map = this.game.add.tilemap("map",16,16);
@@ -22,35 +31,35 @@ export default class Game extends Phaser.State{
         layer.resizeWorld();
         this.mapLayerFloor=layer;
 
-        let heroSprite= this.game.add.sprite(50,this.world.height-100,"hero");
-        this.hero = new Hero(this.game,heroSprite);
+        let heropos = new Phaser.Point(50,this.world.height-100);
+        let heroSprite= this.game.add.sprite(heropos.x,heropos.y,"hero");
+        let ballSprite= this.game.add.sprite(heropos.x,heropos.y,"heroball");
+        let flymanSprite= this.game.add.sprite(heropos.x,heropos.y,"flyman");
 
-        this.camera.follow(this.hero.Sprite);
+        this.hero = new Hero(this.game,heroSprite,ballSprite,flymanSprite);
+
     }
 
     public update(){
         this.game.physics.arcade.collide(this.hero.Sprite,this.mapLayerFloor,
             this.onCollideMap.bind(this));
+        this.game.physics.arcade.collide(this.hero.SpriteBall,this.mapLayerFloor,
+            this.onCollideMap.bind(this));
+        this.game.physics.arcade.collide(this.hero.SpriteFlyman,this.mapLayerFloor,
+            this.onCollideMap.bind(this));
 
         this.hero.update();
+
+        if(this.exitKey.justDown){
+            console.log("exit key down");
+            this.game.pendingDestroy = true;
+            window.location.replace('../launcher.html');
+        }
     }
 
     private onCollideMap(heroSp:Phaser.Sprite,floor:Phaser.Tile,a){
-        console.log("hero.x="+heroSp.x+" floor.x="+floor.worldX);
-        if(heroSp.x>floor.worldX && (heroSp.x-floor.worldX)>=(Math.abs(heroSp.width)*heroSp.anchor.x+floor.width)){
-           this.hero.hitLeft(floor);
-        }
-        if(heroSp.x<floor.worldX && (floor.worldX-heroSp.x)>=(Math.abs(heroSp.width)*(1-heroSp.anchor.x))){
-           this.hero.hitRight(floor);
-        }
-
-        // console.log("hero.y="+heroSp.y+" floor.y="+floor.worldY);
-        if(heroSp.y>floor.worldY && (heroSp.y-floor.worldY)>=floor.height){
-           this.hero.hitTop(floor);
-        }
-        if(heroSp.y<floor.worldY && (floor.worldY-heroSp.y)>=heroSp.height){
-           this.hero.hitBottom(floor);
-        }
+        // console.log("hero.x="+heroSp.x+" floor.x="+floor.worldX);
+        
 
 
     }

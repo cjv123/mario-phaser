@@ -26,8 +26,8 @@ class App extends Phaser.Game {
 }
 
 function startApp(): void {
-    let gameWidth: number = 320/1.6;//320
-    let gameHeight: number = 210/1.6;//240
+    let gameWidth: number = 318/2;//320
+    let gameHeight: number = 238/2;//240
 
     // There are a few more options you can set if needed, just take a look at Phaser.IGameConfig
     let gameConfig: Phaser.IGameConfig = {
