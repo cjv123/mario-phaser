@@ -11,11 +11,6 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/back.png'); }
     }
-    export class ImagesBackgroundTemplate {
-        static getName(): string { return 'background_template'; }
-
-        static getPNG(): string { return require('assets/images/background_template.png'); }
-    }
     export class ImagesBallitem {
         static getName(): string { return 'ballitem'; }
 
