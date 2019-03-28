@@ -23,14 +23,14 @@ class App extends Phaser.Game {
 }
 
 function startApp(): void {
-    let gameWidth: number = 320;//320
-    let gameHeight: number = 240;//240
+    let gameWidth: number = 318;//320
+    let gameHeight: number = 238;//240
 
     // There are a few more options you can set if needed, just take a look at Phaser.IGameConfig
     let gameConfig: Phaser.IGameConfig = {
         width: gameWidth,
         height: gameHeight,
-        renderer: Phaser.AUTO,
+        renderer: Phaser.CANVAS,
         parent: '',
         resolution: 1
     };

@@ -5,6 +5,8 @@ export default class Title extends Phaser.State {
     private mapLayerFloor:Phaser.TilemapLayer=null;
 
     public preload():void{
+        this.game.time.advancedTiming = true;
+
         this.game.load.spritesheet("hero",require("assets/images/hero.png"),16,31,11);
         this.game.load.tilemap("map",require("assets/tilemaps/mapCSV_lv1.csv"),null,Phaser.Tilemap.CSV);
         this.game.load.image("tiles",require("assets/images/map.png"));
@@ -40,13 +42,21 @@ export default class Title extends Phaser.State {
         this.heroSp.body.velocity.set(0);
         this.heroSp.body.velocity.y = 200;
 
-        if(this.game.input.keyboard.isDown(Phaser.Keyboard.D)){
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
             this.heroSp.body.velocity.x = 100;
             this.heroSp.scale.x=1;
-        }else if(this.game.input.keyboard.isDown(Phaser.Keyboard.A)){
+        }else if(this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
             this.heroSp.body.velocity.x = -100;
             this.heroSp.scale.x=-1;
         }
 
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.ESC)){
+            window.location.replace('../../../index.html');
+        } 
+
+    }
+
+    public render(){
+        this.game.debug.text('FPS: ' + this.game.time.fps || 'FPS: --', 40, 40, "#00ff00");
     }
 }
