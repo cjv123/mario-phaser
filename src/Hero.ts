@@ -1,3 +1,4 @@
+import { Tile } from "phaser-ce";
 
 enum Faceing{
     left=0,
@@ -15,6 +16,7 @@ export default class Hero {
     private _sprite:Phaser.Sprite;
     private _spriteBall:Phaser.Sprite;
     private _spriteFlayMan:Phaser.Sprite;
+    private _mapLayer:Phaser.TilemapLayer;
     private game:Phaser.Game;
     private _gv=420;
     private _moveSpeed=120;
@@ -22,7 +24,6 @@ export default class Hero {
     private _facing:Faceing=Faceing.right;
     private _hitWall:boolean=false;
     private _curStatus:HeroStatus = HeroStatus.man;
-    private _ballSpringVelocity=-100;
 
     private _leftKeyCode = Phaser.KeyCode.LEFT;
     private _rightKeyCode = Phaser.KeyCode.RIGHT;
@@ -36,6 +37,7 @@ export default class Hero {
     private _downKey = null;
     private _aKey = null;
     private _bKey = null;
+    private _ballSpring=0;
 
     
 
@@ -73,11 +75,13 @@ export default class Hero {
         game:Phaser.Game,
         sprite:Phaser.Sprite,
         spriteBall:Phaser.Sprite,
-        spriteFlyMan:Phaser.Sprite
+        spriteFlyMan:Phaser.Sprite,
+        mapLayer:Phaser.TilemapLayer
         ){
         this._sprite=sprite;
         this._spriteBall=spriteBall;
         this._spriteFlayMan=spriteFlyMan;
+        this._mapLayer=mapLayer;
         this.game=game;
         this.setupKey();
 
@@ -116,6 +120,7 @@ export default class Hero {
         this._spriteBall.animations.add("move",ballMoveFrames,16);
         this._spriteBall.animations.add("jump_up",ballMoveFrames,16);
         this._spriteBall.animations.add("jump_down",ballMoveFrames,16);
+    ;
 
         this._spriteFlayMan.animations.add("move",[0,1],20);
         this._spriteFlayMan.animations.add("stand",[2,3],10);
@@ -127,6 +132,23 @@ export default class Hero {
     }
 
     public changeToMan(){
+        if(this._curStatus==HeroStatus.ball){
+            let map = this._mapLayer.map;
+            if(
+                map.getTile(Math.floor(this._spriteBall.x/16),Math.floor(this._spriteBall.y/16)-1).index>0 ||
+				map.getTile(Math.floor((this._spriteBall.x+7)/16),Math.floor(this._spriteBall.y/16)-1).index>0
+			){
+				return;
+			}
+			
+			if(
+				map.getTile(Math.floor(this._spriteBall.x/16)+1,Math.floor(this._spriteBall.y/16)).index>0 &&
+				map.getTile(Math.floor(this._spriteBall.x/16)-1,Math.floor(this._spriteBall.y/16)).index>0
+			){
+				return;
+			}
+        }
+
         this._sprite.visible=true;
         this._spriteBall.visible=false;
         this._spriteFlayMan.visible=false;
@@ -304,12 +326,13 @@ export default class Hero {
            this.onHitBottomBlock();
         }
 
-        if(this._spriteBall.body.blocked.down){
-            this.onBallHitBottomBlick();
-        }
+        // if(this._spriteBall.body.velocity.y>0){
+        //     this._ballSpring = -this._spriteBall.body.velocity.y * 0.3;
+        // }
 
-      
-
+        // if(this._spriteBall.body.blocked.down){
+        //     this.onBallHitBottomBlick();
+        // }
     }
 
     private updateFaceing(){
@@ -356,10 +379,11 @@ export default class Hero {
     public onFlyHitBlock(){
         this.changeToMan();
     }
-
     
     public onBallHitBottomBlick(){
-        // this._spriteBall.body.velocity.y = this._ballSpringVelocity
-        // this._ballSpringVelocity=0.5*this._ballSpringVelocity;
+        if(this._ballSpring<0){
+            this._spriteBall.body.velocity.y=this._ballSpring;
+            this._ballSpring=0;
+        }
     }
 }
