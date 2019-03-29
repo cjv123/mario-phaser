@@ -1,11 +1,10 @@
-import { Tile } from "phaser-ce";
 
 enum Faceing{
     left=0,
     right=1
 }
 
-enum HeroStatus{
+export enum HeroStatus{
     man=0,
     ball=1,
     fly=2,
@@ -52,6 +51,9 @@ export default class Hero {
     }
     public get SpriteFlyman(){
         return this._spriteFlayMan;
+    }
+    public get CurHeroStatus(){
+        return this._curStatus;
     }
 
     private setupKey(){
@@ -113,7 +115,7 @@ export default class Hero {
         this._sprite.animations.add("jump_down",[7],0);
         this._sprite.animations.add("jump_up",[6],0);
         this._sprite.animations.add("hitwall",[8],0);
-        this._sprite.animations.add("die",[9,10],8);
+        this._sprite.animations.add("die",[9,10],8,true);
 
         this._spriteBall.animations.add("stand",[0]);
         let ballMoveFrames=[3,2,1,0]
@@ -135,15 +137,15 @@ export default class Hero {
         if(this._curStatus==HeroStatus.ball){
             let map = this._mapLayer.map;
             if(
-                map.getTile(Math.floor(this._spriteBall.x/16),Math.floor(this._spriteBall.y/16)-1).index>0 ||
-				map.getTile(Math.floor((this._spriteBall.x+7)/16),Math.floor(this._spriteBall.y/16)-1).index>0
+                map.getTile(Math.floor(this._spriteBall.x/16),Math.floor(this._spriteBall.y/16)-1,this._mapLayer).index>0 ||
+				map.getTile(Math.floor((this._spriteBall.x+7)/16),Math.floor(this._spriteBall.y/16)-1,this._mapLayer).index>0
 			){
 				return;
 			}
 			
 			if(
-				map.getTile(Math.floor(this._spriteBall.x/16)+1,Math.floor(this._spriteBall.y/16)).index>0 &&
-				map.getTile(Math.floor(this._spriteBall.x/16)-1,Math.floor(this._spriteBall.y/16)).index>0
+				map.getTile(Math.floor(this._spriteBall.x/16)+1,Math.floor(this._spriteBall.y/16),this._mapLayer).index>0 &&
+				map.getTile(Math.floor(this._spriteBall.x/16)-1,Math.floor(this._spriteBall.y/16),this._mapLayer).index>0
 			){
 				return;
 			}
@@ -155,7 +157,7 @@ export default class Hero {
 
         if(this._curStatus==HeroStatus.ball){
             this._sprite.position = this._spriteBall.position.clone();
-        }else{
+        }else if(this._curStatus==HeroStatus.fly){
             this._sprite.position = this._spriteFlayMan.position.clone();
         }
 
@@ -203,12 +205,14 @@ export default class Hero {
 
     public update(){
         let body = this.getCurSprite().body;
+
         body.acceleration.x=0;
         body.acceleration.y=400;
 
         if(this._curStatus==HeroStatus.die){
             return;
         }
+
 
         // let curSprite = this.getCurSprite();
         // if(false == curSprite.inCamera && curSprite.body.velocity.y>0){
@@ -319,7 +323,7 @@ export default class Hero {
            this.onHitRightBlock();
         }
 
-        if(this.Sprite.body.blocked.top){
+        if(this.Sprite.body.blocked.up){
            this.onHitTopBlock();
         }
         if(this.Sprite.body.blocked.down){
@@ -349,11 +353,11 @@ export default class Hero {
     }
 
     public die(){
-        this._curStatus= HeroStatus.die;
         this.changeToMan();
         this._sprite.body.velocity.y = -this._jumpPower;
-        this._sprite.body.enable =false;
-        
+        // this._sprite.body.enable =false;
+        this._sprite.animations.play("die");
+        this._curStatus= HeroStatus.die;
     }
 
     public onHitLeftBlock(){

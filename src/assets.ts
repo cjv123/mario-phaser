@@ -11,6 +11,11 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/back.png'); }
     }
+    export class ImagesBackgroundTemplate {
+        static getName(): string { return 'background_template'; }
+
+        static getPNG(): string { return require('assets/images/background_template.png'); }
+    }
     export class ImagesBallitem {
         static getName(): string { return 'ballitem'; }
 
@@ -433,7 +438,146 @@ export namespace BitmapFonts {
 }
 
 export namespace JSON {
-    class IExistSoTypeScriptWillNotComplainAboutAnEmptyNamespace {}
+    export class TilemapsLevelLv1 {
+        static getName(): string { return 'Level_lv1'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv1.json'); }
+    }
+    export class TilemapsLevelLv10 {
+        static getName(): string { return 'Level_lv10'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv10.json'); }
+    }
+    export class TilemapsLevelLv11 {
+        static getName(): string { return 'Level_lv11'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv11.json'); }
+    }
+    export class TilemapsLevelLv12 {
+        static getName(): string { return 'Level_lv12'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv12.json'); }
+    }
+    export class TilemapsLevelLv13 {
+        static getName(): string { return 'Level_lv13'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv13.json'); }
+    }
+    export class TilemapsLevelLv14 {
+        static getName(): string { return 'Level_lv14'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv14.json'); }
+    }
+    export class TilemapsLevelLv15 {
+        static getName(): string { return 'Level_lv15'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv15.json'); }
+    }
+    export class TilemapsLevelLv16 {
+        static getName(): string { return 'Level_lv16'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv16.json'); }
+    }
+    export class TilemapsLevelLv17 {
+        static getName(): string { return 'Level_lv17'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv17.json'); }
+    }
+    export class TilemapsLevelLv18 {
+        static getName(): string { return 'Level_lv18'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv18.json'); }
+    }
+    export class TilemapsLevelLv19 {
+        static getName(): string { return 'Level_lv19'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv19.json'); }
+    }
+    export class TilemapsLevelLv2 {
+        static getName(): string { return 'Level_lv2'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv2.json'); }
+    }
+    export class TilemapsLevelLv20 {
+        static getName(): string { return 'Level_lv20'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv20.json'); }
+    }
+    export class TilemapsLevelLv21 {
+        static getName(): string { return 'Level_lv21'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv21.json'); }
+    }
+    export class TilemapsLevelLv22 {
+        static getName(): string { return 'Level_lv22'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv22.json'); }
+    }
+    export class TilemapsLevelLv23 {
+        static getName(): string { return 'Level_lv23'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv23.json'); }
+    }
+    export class TilemapsLevelLv24 {
+        static getName(): string { return 'Level_lv24'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv24.json'); }
+    }
+    export class TilemapsLevelLv25 {
+        static getName(): string { return 'Level_lv25'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv25.json'); }
+    }
+    export class TilemapsLevelLv26 {
+        static getName(): string { return 'Level_lv26'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv26.json'); }
+    }
+    export class TilemapsLevelLv27 {
+        static getName(): string { return 'Level_lv27'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv27.json'); }
+    }
+    export class TilemapsLevelLv28 {
+        static getName(): string { return 'Level_lv28'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv28.json'); }
+    }
+    export class TilemapsLevelLv3 {
+        static getName(): string { return 'Level_lv3'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv3.json'); }
+    }
+    export class TilemapsLevelLv4 {
+        static getName(): string { return 'Level_lv4'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv4.json'); }
+    }
+    export class TilemapsLevelLv5 {
+        static getName(): string { return 'Level_lv5'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv5.json'); }
+    }
+    export class TilemapsLevelLv6 {
+        static getName(): string { return 'Level_lv6'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv6.json'); }
+    }
+    export class TilemapsLevelLv7 {
+        static getName(): string { return 'Level_lv7'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv7.json'); }
+    }
+    export class TilemapsLevelLv8 {
+        static getName(): string { return 'Level_lv8'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv8.json'); }
+    }
+    export class TilemapsLevelLv9 {
+        static getName(): string { return 'Level_lv9'; }
+
+        static getJSON(): string { return require('assets/tilemaps/Level_lv9.json'); }
+    }
 }
 
 export namespace TilemapJSON {

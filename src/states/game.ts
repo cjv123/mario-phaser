@@ -1,7 +1,7 @@
-import Hero from "../Hero";
+import Hero, { HeroStatus } from "../Hero";
 
 export default class Game extends Phaser.State{
-    public static curLevel=1;
+    public static curLevel=2;
 
     private hero:Hero=null;
     private map:Phaser.Tilemap=null;
@@ -9,6 +9,7 @@ export default class Game extends Phaser.State{
     private exitKey:Phaser.Key=null;
     private door:Phaser.Sprite=null;
     private stoneGroup:Phaser.Group=null;
+    private stabGroup:Phaser.Group=null;
 
     public preload(){
         this.game.load.spritesheet("hero",require("assets/images/hero.png"),16,31,11);
@@ -20,6 +21,7 @@ export default class Game extends Phaser.State{
         this.game.load.image("door",require("assets/images/door.png"));
         this.game.load.image("stone",require("assets/images/stone.png"));
         this.game.load.spritesheet("stone_gibs",require("assets/images/stone_gibs.png"),8,8,4);
+        this.game.load.image("stab",require("assets/images/stab_tile.png"));
     }
 
     private setupKey(){
@@ -50,22 +52,37 @@ export default class Game extends Phaser.State{
 
         this.stoneGroup = this.game.add.group();
         let stoneArr = mapJson.level.objects.Stone;
-        for (const iterator of stoneArr) {
-            let stone= this.game.add.sprite(Number(iterator.x),Number(iterator.y),"stone");
-            this.game.physics.enable(stone,Phaser.Physics.ARCADE);
-            stone.body.immovable =true;
+        if(stoneArr){
+            for (const iterator of stoneArr) {
+                let stone = this.game.add.sprite(Number(iterator.x), Number(iterator.y), "stone");
+                this.game.physics.enable(stone, Phaser.Physics.ARCADE);
+                stone.body.immovable = true;
 
-            let emitter = this.game.add.emitter(stone.x, stone.y, 250);
-            emitter.makeParticles('stone_gibs', [0, 1, 2, 3], 4, false, false);
-            emitter.minParticleSpeed.setTo(80, -80);
-            emitter.maxParticleSpeed.setTo(-80, 0);
-            emitter.gravity.y = 200;
-            emitter.bounce.setTo(0.5, 0.5);
-            emitter.angularDrag = 30;
-            stone["emitter"] =emitter;
+                let emitter = this.game.add.emitter(stone.x, stone.y, 250);
+                emitter.makeParticles('stone_gibs', [0, 1, 2, 3], 4, false, false);
+                emitter.minParticleSpeed.setTo(80, -80);
+                emitter.maxParticleSpeed.setTo(-80, 0);
+                emitter.gravity.y = 200;
+                emitter.bounce.setTo(0.5, 0.5);
+                emitter.angularDrag = 30;
+                stone["emitter"] = emitter;
 
-            this.stoneGroup.add(stone);
+                this.stoneGroup.add(stone);
+            }
         }
+
+        let stabArr= mapJson.level.objects.Stab;
+        if(stabArr){
+            this.stabGroup = this.game.add.group();
+            for (const iterator of stabArr) {
+                let stab = this.game.add.sprite(Number(iterator.x), Number(iterator.y), "stab");
+                this.game.physics.enable(stab, Phaser.Physics.ARCADE);
+                stab.body.immovable = true;
+                this.stabGroup.add(stab);
+            }
+
+        }
+
 
         let heroJsonPos = mapJson.level.objects.Hero;
         let heropos = new Phaser.Point(Number(heroJsonPos.x),Number(heroJsonPos.y)-32);
@@ -79,18 +96,44 @@ export default class Game extends Phaser.State{
         let self=this;
         let heros = [this.hero.Sprite,this.hero.SpriteBall,this.hero.SpriteFlyman];
 
-        for(let i=0;i<heros.length;i++){
-            this.game.physics.arcade.collide(heros[i], this.mapLayerFloor);
-        }
-        this.game.physics.arcade.collide(this.hero.Sprite, this.stoneGroup);
-        this.game.physics.arcade.collide(this.hero.SpriteBall, this.stoneGroup,function(ball,stone){
-            if(stone["emitter"]!=null){
-                stone["emitter"].start(true, 2000,null,4); 
+        if(this.hero.CurHeroStatus!=HeroStatus.die){
+            for (let i = 0; i < heros.length; i++) {
+                this.game.physics.arcade.collide(heros[i], this.mapLayerFloor);
             }
-            stone.kill();
-            
-        });
-        this.game.physics.arcade.collide(this.hero.SpriteFlyman, this.stoneGroup);
+            this.game.physics.arcade.collide(this.hero.Sprite, this.stoneGroup, function (sprite, stone) {
+                if (self.hero.CurHeroStatus == HeroStatus.man && self.hero.Sprite.body.touching.up) {
+                    if (stone["emitter"] != null) {
+                        stone["emitter"].start(true, 2000, null, 4);
+                    }
+                    stone.kill();
+                }
+            });
+            this.game.physics.arcade.collide(this.hero.SpriteBall, this.stoneGroup, function (ball, stone) {
+                if (self.hero.CurHeroStatus == HeroStatus.ball) {
+                    if (stone["emitter"] != null) {
+                        stone["emitter"].start(true, 2000, null, 4);
+                    }
+                    stone.kill();
+                }
+            });
+            this.game.physics.arcade.collide(this.hero.SpriteFlyman, this.stoneGroup, function () {
+                if (self.hero.CurHeroStatus == HeroStatus.fly) {
+                    self.hero.changeToMan();
+                }
+            });
+
+            this.game.physics.arcade.collide(this.hero.Sprite, this.stabGroup, function (sprite, stab) {
+                if (self.hero.CurHeroStatus == HeroStatus.man && self.hero.Sprite.body.touching.down) {
+                    self.hero.die();
+                }
+            });
+            this.game.physics.arcade.collide(this.hero.SpriteFlyman, this.stabGroup, function (sprite, stab) {
+                if (self.hero.CurHeroStatus == HeroStatus.fly && self.hero.Sprite.body.touching.down) {
+                    self.hero.die();
+                }
+            });
+        }
+
 
         this.hero.update();
 
