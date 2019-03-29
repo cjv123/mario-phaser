@@ -1,0 +1,57 @@
+{
+    "level": {
+        "objects": {
+            "KeyObj": {
+                "x": "722",
+                "y": "106"
+            },
+            "Stone": [
+                {
+                    "x": "677",
+                    "y": "448"
+                },
+                {
+                    "x": "699",
+                    "y": "448"
+                },
+                {
+                    "x": "722",
+                    "y": "448"
+                },
+                {
+                    "x": "749",
+                    "y": "448"
+                }
+            ],
+            "Coin": {
+                "x": "628",
+                "y": "31"
+            },
+            "FlyObj": {
+                "x": "1209",
+                "y": "401"
+            },
+            "ExitDoor": {
+                "x": "1549",
+                "y": "84"
+            },
+            "QueObj": {
+                "x": "1118",
+                "y": "410",
+                "text": "Take the feathers, you can fly with four directional buttons to control movement.But when you encounter any obstacles will be restored to their original. Try it!"
+            },
+            "Hero": {
+                "x": "46",
+                "y": "413"
+            },
+            "ClimbItem": {
+                "x": "331",
+                "y": "406"
+            },
+            "BallItem": {
+                "x": "568",
+                "y": "407"
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "level": {
+        "objects": {
+            "ExitDoor": {
+                "x": "422",
+                "y": "404"
+            },
+            "Hero": {
+                "x": "90",
+                "y": "350"
+            },
+            "KeyObj": {
+                "x": "38",
+                "y": "38"
+            },
+            "QueObj": {
+                "x": "124",
+                "y": "380",
+                "text": "Take the Paw.You can climb up walls. Press the arrows button to against the wall and than press the jump button to climb. Try it",
+                "item": "ClimbItem"
+            },
+            "Coin": {
+                "x": "432",
+                "y": "45"
+            }
+        }
+    }
+}
