@@ -1,0 +1,73 @@
+{
+    "level": {
+        "objects": {
+            "ExitDoor": {
+                "x": "422",
+                "y": "404"
+            },
+            "Hero": {
+                "x": "90",
+                "y": "430"
+            },
+            "KeyObj": {
+                "x": "38",
+                "y": "394"
+            },
+            "Stone": [
+                {
+                    "x": "273",
+                    "y": "384"
+                },
+                {
+                    "x": "273",
+                    "y": "400"
+                },
+                {
+                    "x": "273",
+                    "y": "416"
+                },
+                {
+                    "x": "303",
+                    "y": "416"
+                },
+                {
+                    "x": "303",
+                    "y": "400"
+                },
+                {
+                    "x": "303",
+                    "y": "384"
+                },
+                {
+                    "x": "288",
+                    "y": "416"
+                },
+                {
+                    "x": "288",
+                    "y": "400"
+                },
+                {
+                    "x": "288",
+                    "y": "384"
+                }
+            ],
+            "Coin": {
+                "x": "432",
+                "y": "350"
+            },
+            "QueObj": [
+                {
+                    "x": "332",
+                    "y": "370",
+                    "text": "There is a star waiting for you to collect in every stage.You can gather they, but this does not affect the pass."
+                },
+                {
+                    "x": "124",
+                    "y": "370",
+                    "text": "Welcome! This game is very easy. First,you find the key in the stage, and then open the door with this key. Take the ball!.You can change to a ball with. Through the narrow terrain.Also can break bricks. Good Luck! ",
+                    "item": "BallItem"
+                }
+            ]
+        }
+    }
+}
