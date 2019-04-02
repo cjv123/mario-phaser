@@ -104,7 +104,7 @@ export default class Hero {
         this._spriteBall.body.drag = this._sprite.body.drag.clone();
         this._spriteBall.anchor.x=0.5;
 
-        this._spriteFlayMan.body.acceleration = this._sprite.body.acceleration.clone();
+        this._spriteFlayMan.body.acceleration.set(0);
         this._spriteFlayMan.body.maxVelocity = this._sprite.body.maxVelocity.clone();
         this._spriteFlayMan.body.drag = this._sprite.body.drag.clone();
         this._spriteFlayMan.anchor.x=0.5;

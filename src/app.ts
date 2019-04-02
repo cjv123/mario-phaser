@@ -9,6 +9,10 @@ import Preloader from './states/preloader';
 import Home from './states/home';
 import Game from './states/game';
 import Hero from './Hero';
+import StoneHidden from './StoneHidden';
+import StoneMove from './StoneMove';
+import StoneMoveD from './StoneMoveD';
+
 import * as Utils from './utils/utils';
 import * as Assets from './assets';
 
@@ -26,8 +30,8 @@ class App extends Phaser.Game {
 }
 
 function startApp(): void {
-    let gameWidth: number = 318/2;//320
-    let gameHeight: number = 238/2;//240
+    let gameWidth: number = 318;//320
+    let gameHeight: number = 238;//240
 
     // There are a few more options you can set if needed, just take a look at Phaser.IGameConfig
     let gameConfig: Phaser.IGameConfig = {

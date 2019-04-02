@@ -16,7 +16,7 @@ export default class Boot extends Phaser.State {
 
         
         this.game.scale.scaleMode= Phaser.ScaleManager.USER_SCALE;
-        this.game.scale.setUserScale(2, 2);
+        this.game.scale.setUserScale(1, 1);
    
 
         this.game.renderer.renderSession.roundPixels = true;

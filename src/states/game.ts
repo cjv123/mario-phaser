@@ -1,7 +1,9 @@
 import Hero, { HeroStatus } from "../Hero";
+import StoneHidden from "../StoneHidden";
+import StoneMove from "../StoneMove";
 
 export default class Game extends Phaser.State{
-    public static curLevel=2;
+    public static curLevel=1;
 
     private hero:Hero=null;
     private map:Phaser.Tilemap=null;
@@ -10,6 +12,10 @@ export default class Game extends Phaser.State{
     private door:Phaser.Sprite=null;
     private stoneGroup:Phaser.Group=null;
     private stabGroup:Phaser.Group=null;
+    private fanGroup:Phaser.Group=null;
+    private getKey:boolean=false;
+    private keyObj:Phaser.Sprite=null;
+    private flyObj:Phaser.Sprite=null;
 
     public preload(){
         this.game.load.spritesheet("hero",require("assets/images/hero.png"),16,31,11);
@@ -22,6 +28,10 @@ export default class Game extends Phaser.State{
         this.game.load.image("stone",require("assets/images/stone.png"));
         this.game.load.spritesheet("stone_gibs",require("assets/images/stone_gibs.png"),8,8,4);
         this.game.load.image("stab",require("assets/images/stab_tile.png"));
+        this.game.load.image("key",require("assets/images/key.png"));
+        this.game.load.image("keyflag",require("assets/images/haskey.png"));
+        this.game.load.image("flyobj",require("assets/images/flyobj.png"));
+        this.game.load.spritesheet("fanObj",require("assets/images/fan.png"),32,32,4);
     }
 
     private setupKey(){
@@ -45,6 +55,7 @@ export default class Game extends Phaser.State{
     }
 
     private createObject() {
+        
         let mapJson = this.game.cache.getJSON("mapjson");
 
         let doorPos = new Phaser.Point(Number(mapJson.level.objects.ExitDoor.x),Number(mapJson.level.objects.ExitDoor.y));
@@ -52,7 +63,7 @@ export default class Game extends Phaser.State{
 
         this.stoneGroup = this.game.add.group();
         let stoneArr = mapJson.level.objects.Stone;
-        if(stoneArr){
+        if(stoneArr && stoneArr.length>0){
             for (const iterator of stoneArr) {
                 let stone = this.game.add.sprite(Number(iterator.x), Number(iterator.y), "stone");
                 this.game.physics.enable(stone, Phaser.Physics.ARCADE);
@@ -71,6 +82,45 @@ export default class Game extends Phaser.State{
             }
         }
 
+        let stoneHidden = mapJson.level.objects.StoneHidden;       
+        if(stoneHidden){
+            let self =this;
+            let addStoneHidden=function(x,y){
+                let stoneHiddenSp = new StoneHidden(
+                    self.game,x,y
+                );
+                self.stage.add(stoneHiddenSp);
+                self.stoneGroup.add(stoneHiddenSp);
+            }
+
+            if(stoneHidden.length>0){
+                for (const iterator of stoneHidden) {
+                    addStoneHidden(Number(iterator.x),Number(iterator.y));
+                }
+            }else{
+                addStoneHidden(Number(stoneHidden.x),Number(stoneHidden.y));
+            }
+        }
+
+        let stoneMove = mapJson.level.objects.StoneMove;
+        if(stoneMove){
+            let self=this;
+            let addStoneMove=function(x,y){
+                let stoneMove = new StoneMove(self.game,x,y);
+                self.stage.add(stoneMove);
+                self.stoneGroup.add(stoneMove);
+            }
+
+            if(stoneMove.length>0){
+                for (const iterator of stoneMove) {
+                    addStoneMove(Number(iterator.x),Number(iterator.y));
+                } 
+            }else{
+                addStoneMove(Number(stoneMove.x),Number(stoneMove.y));
+            }
+        }
+
+
         let stabArr= mapJson.level.objects.Stab;
         if(stabArr){
             this.stabGroup = this.game.add.group();
@@ -83,6 +133,28 @@ export default class Game extends Phaser.State{
 
         }
 
+        let keyPos = mapJson.level.objects.KeyObj;
+        if(keyPos){
+            this.keyObj = this.game.add.sprite(Number(keyPos.x),Number(keyPos.y),"key");
+            this.game.physics.enable(this.keyObj,Phaser.Physics.ARCADE);
+        }
+
+        let flyPos = mapJson.level.objects.FlyObj;
+        if(flyPos){
+            this.flyObj = this.game.add.sprite(Number(flyPos.x),Number(flyPos.y),"flyobj");
+            this.game.physics.enable(this.flyObj,Phaser.Physics.ARCADE);
+        }
+
+        this.fanGroup = this.game.add.group();
+        let fanObjs = mapJson.level.objects.Fan;
+        if(fanObjs && fanObjs.length && fanObjs.length>0){
+            for (const iterator of fanObjs) {
+                let fanObj = this.game.add.sprite(Number(iterator.x),Number(iterator.y),"fanObj");
+                this.fanGroup.add(fanObj);
+                fanObj.animations.add("run",[0,1,2,3],50,true);
+                fanObj.animations.play("run");
+            }
+        }
 
         let heroJsonPos = mapJson.level.objects.Hero;
         let heropos = new Phaser.Point(Number(heroJsonPos.x),Number(heroJsonPos.y)-32);
@@ -99,7 +171,26 @@ export default class Game extends Phaser.State{
         if(this.hero.CurHeroStatus!=HeroStatus.die){
             for (let i = 0; i < heros.length; i++) {
                 this.game.physics.arcade.collide(heros[i], this.mapLayerFloor);
+                this.game.physics.arcade.overlap(heros[i],self.keyObj,function(hero,keyobj:Phaser.Sprite){
+                    keyobj.kill();
+                    self.getKey=true;
+                    let keyflag = self.game.add.sprite(self.game.world.width/2,50,"keyflag");
+                    keyflag.anchor.set(0.5);
+                });
+
+                this.game.physics.arcade.overlap(heros[i],self.flyObj, function (hero, flyObj: Phaser.Sprite) {
+                    flyObj.kill();
+                    self.hero.changeToFlayMan();
+                });
+
+                for (const iterator of this.fanGroup.getAll()) {
+                    if(heros[i].x >= iterator.x && heros[i].x<=iterator.x+iterator.width 
+                        && iterator.y-heros[i].y <210*2) {
+                        heros[i].body.velocity.y -=20*2;
+                    }
+                }
             }
+
             this.game.physics.arcade.collide(this.hero.Sprite, this.stoneGroup, function (sprite, stone) {
                 if (self.hero.CurHeroStatus == HeroStatus.man && self.hero.Sprite.body.touching.up) {
                     if (stone["emitter"] != null) {
@@ -118,10 +209,11 @@ export default class Game extends Phaser.State{
             });
             this.game.physics.arcade.collide(this.hero.SpriteFlyman, this.stoneGroup, function () {
                 if (self.hero.CurHeroStatus == HeroStatus.fly) {
-                    self.hero.changeToMan();
+                    self.hero.changeToFlayMan();
                 }
             });
 
+            this.game.physics.arcade.collide(this.hero.SpriteBall, this.stabGroup);
             this.game.physics.arcade.collide(this.hero.Sprite, this.stabGroup, function (sprite, stab) {
                 if (self.hero.CurHeroStatus == HeroStatus.man && self.hero.Sprite.body.touching.down) {
                     self.hero.die();
@@ -134,8 +226,8 @@ export default class Game extends Phaser.State{
             });
         }
 
-
         this.hero.update();
+
 
         if(this.exitKey.justDown){
             console.log("exit key down");

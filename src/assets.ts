@@ -216,6 +216,11 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/pause.png'); }
     }
+    export class ImagesPhaser {
+        static getName(): string { return 'phaser'; }
+
+        static getPNG(): string { return require('assets/images/phaser.png'); }
+    }
     export class ImagesRbuttonSel {
         static getName(): string { return 'rbutton_sel'; }
 
