@@ -25,13 +25,13 @@ class App extends Phaser.Game {
         this.state.add('home',Home);
         this.state.add('game',Game);
 
-        this.state.start('boot');
+        this.state.start('home');
     }
 }
 
 function startApp(): void {
-    let gameWidth: number = 318;//320
-    let gameHeight: number = 238;//240
+    let gameWidth: number = 318/2;//320
+    let gameHeight: number = 238/2;//240
 
     // There are a few more options you can set if needed, just take a look at Phaser.IGameConfig
     let gameConfig: Phaser.IGameConfig = {
