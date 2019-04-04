@@ -17,6 +17,8 @@ export default class Boot extends Phaser.State {
         
         this.game.scale.scaleMode= Phaser.ScaleManager.USER_SCALE;
         this.game.scale.setUserScale(2, 2);
+        // this.game.scale.pageAlignHorizontally = true;
+        // this.game.scale.pageAlignVertically = true;
    
 
         this.game.renderer.renderSession.roundPixels = true;
@@ -45,6 +47,6 @@ export default class Boot extends Phaser.State {
            \nSOUND_EXTENSIONS_PREFERENCE. ${SOUND_EXTENSIONS_PREFERENCE}`
         );
 
-        this.game.state.start('game');
+        this.game.state.start('home');
     }
 }

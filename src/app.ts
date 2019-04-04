@@ -8,6 +8,8 @@ import Boot from './states/boot';
 import Preloader from './states/preloader';
 import Home from './states/home';
 import Game from './states/game';
+import Level from './states/level';
+import GameOver from './states/gameover';
 import Hero from './Hero';
 import StoneHidden from './StoneHidden';
 import StoneMove from './StoneMove';
@@ -24,14 +26,16 @@ class App extends Phaser.Game {
         this.state.add('preloader', Preloader);
         this.state.add('home',Home);
         this.state.add('game',Game);
+        this.state.add('level',Level);
+        this.state.add('gameover',GameOver);
 
-        this.state.start('home');
+        this.state.start('boot');
     }
 }
 
 function startApp(): void {
-    let gameWidth: number = 318/2;//320
-    let gameHeight: number = 238/2;//240
+    let gameWidth: number = 320/2;//320
+    let gameHeight: number = 240/2;//240
 
     // There are a few more options you can set if needed, just take a look at Phaser.IGameConfig
     let gameConfig: Phaser.IGameConfig = {

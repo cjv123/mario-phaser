@@ -4,6 +4,7 @@ import StoneMove from "../StoneMove";
 
 export default class Game extends Phaser.State{
     public static curLevel=1;
+    public static life = 5;
 
     private hero:Hero=null;
     private map:Phaser.Tilemap=null;
@@ -16,6 +17,7 @@ export default class Game extends Phaser.State{
     private getKey:boolean=false;
     private keyObj:Phaser.Sprite=null;
     private flyObj:Phaser.Sprite=null;
+    private bgm:Phaser.Sound=null;
 
     public preload(){
         this.game.load.spritesheet("hero",require("assets/images/hero.png"),16,31,11);
@@ -31,7 +33,14 @@ export default class Game extends Phaser.State{
         this.game.load.image("key",require("assets/images/key.png"));
         this.game.load.image("keyflag",require("assets/images/haskey.png"));
         this.game.load.image("flyobj",require("assets/images/flyobj.png"));
+        this.game.load.image("head",require("assets/images/headsmall.png"));
         this.game.load.spritesheet("fanObj",require("assets/images/fan.png"),32,32,4);
+
+        this.game.load.audio("bgm",require("assets/audio/bgm.wav"));
+        this.game.load.audio("jump",require("assets/audio/jump.wav"));
+        this.game.load.audio("eat",require("assets/audio/eat.wav"));
+        this.game.load.audio("die",require("assets/audio/dead.wav"));
+        this.game.load.audio("bomb",require("assets/audio/dingstone.wav"));
     }
 
     private setupKey(){
@@ -40,6 +49,7 @@ export default class Game extends Phaser.State{
     }
 
     public create(){
+        this.getKey=false;
         this.setupKey();
         this.stage.setBackgroundColor('rgb(168,224,248)');
 
@@ -52,6 +62,20 @@ export default class Game extends Phaser.State{
         this.mapLayerFloor=layer;
         
         this.createObject();
+
+        for(let i=0;i<Game.life;i++){
+            let head = this.game.add.image(2,2,"head");
+            head.x = i*(head.width+2)+2;
+            head.fixedToCamera=true;
+        }
+
+        this.bgm = this.game.add.audio("bgm",1,true);
+        this.bgm.play();
+
+        this.game.add.sound("jump");
+        this.game.add.sound("eat");
+        this.game.add.sound("die");
+        this.game.add.sound("bomb");
     }
 
     private createObject() {
@@ -174,8 +198,10 @@ export default class Game extends Phaser.State{
                 this.game.physics.arcade.overlap(heros[i],self.keyObj,function(hero,keyobj:Phaser.Sprite){
                     keyobj.kill();
                     self.getKey=true;
-                    let keyflag = self.game.add.sprite(self.game.world.width/2,50,"keyflag");
+                    let keyflag = self.game.add.sprite(self.game.width/2,6,"keyflag");
                     keyflag.anchor.set(0.5);
+                    keyflag.fixedToCamera=true;
+                    self.game.sound.play("eat");
                 });
 
                 this.game.physics.arcade.overlap(heros[i],self.flyObj, function (hero, flyObj: Phaser.Sprite) {
@@ -197,6 +223,7 @@ export default class Game extends Phaser.State{
                         stone["emitter"].start(true, 2000, null, 4);
                     }
                     stone.kill();
+                    self.game.sound.play("bomb");
                 }
             });
             this.game.physics.arcade.collide(this.hero.SpriteBall, this.stoneGroup, function (ball, stone) {
@@ -205,6 +232,7 @@ export default class Game extends Phaser.State{
                         stone["emitter"].start(true, 2000, null, 4);
                     }
                     stone.kill();
+                    self.game.sound.play("bomb");
                 }
             });
             this.game.physics.arcade.collide(this.hero.SpriteFlyman, this.stoneGroup, function () {
@@ -227,12 +255,22 @@ export default class Game extends Phaser.State{
         }
 
         this.hero.update();
+        if(this.getKey==true){
+            this.hero.updateExit(this.door);
+        }
 
 
         if(this.exitKey.justDown){
             console.log("exit key down");
             this.game.pendingDestroy = true;
-            window.location.replace('../index.html');
+            window.location.replace('exit.html');
+            // if(typeof nw != "undefined"){
+                // nw.App.closeAllWindows();
+            // }
         }
+    }
+
+    public shutdown(){
+        this.bgm.stop();
     }
 }

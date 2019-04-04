@@ -111,6 +111,16 @@ export namespace Images {
 
         static getPNG(): string { return require('assets/images/head.png'); }
     }
+    export class ImagesHead80 {
+        static getName(): string { return 'head80'; }
+
+        static getPNG(): string { return require('assets/images/head80.png'); }
+    }
+    export class ImagesHeadsmall {
+        static getName(): string { return 'headsmall'; }
+
+        static getPNG(): string { return require('assets/images/headsmall.png'); }
+    }
     export class ImagesHero {
         static getName(): string { return 'hero'; }
 
@@ -374,13 +384,75 @@ export namespace Atlases {
 }
 
 export namespace Audio {
-    export class AudioMusic {
-        static getName(): string { return 'music'; }
+    export class AudioBgm {
+        static getName(): string { return 'bgm'; }
 
-        static getAC3(): string { return require('assets/audio/music.ac3'); }
-        static getM4A(): string { return require('assets/audio/music.m4a'); }
-        static getMP3(): string { return require('assets/audio/music.mp3'); }
-        static getOGG(): string { return require('assets/audio/music.ogg'); }
+        static getWAV(): string { return require('assets/audio/bgm.wav'); }
+    }
+    export class AudioCai {
+        static getName(): string { return 'cai'; }
+
+        static getWAV(): string { return require('assets/audio/cai.wav'); }
+    }
+    export class AudioDead {
+        static getName(): string { return 'dead'; }
+
+        static getWAV(): string { return require('assets/audio/dead.wav'); }
+    }
+    export class AudioDing {
+        static getName(): string { return 'ding'; }
+
+        static getWAV(): string { return require('assets/audio/ding.wav'); }
+    }
+    export class AudioDingstone {
+        static getName(): string { return 'dingstone'; }
+
+        static getWAV(): string { return require('assets/audio/dingstone.wav'); }
+    }
+    export class AudioEat {
+        static getName(): string { return 'eat'; }
+
+        static getWAV(): string { return require('assets/audio/eat.wav'); }
+    }
+    export class AudioHome {
+        static getName(): string { return 'home'; }
+
+        static getWAV(): string { return require('assets/audio/home.wav'); }
+    }
+    export class AudioJiao {
+        static getName(): string { return 'jiao'; }
+
+        static getWAV(): string { return require('assets/audio/jiao.wav'); }
+    }
+    export class AudioJump {
+        static getName(): string { return 'jump'; }
+
+        static getWAV(): string { return require('assets/audio/jump.wav'); }
+    }
+    export class AudioLogo {
+        static getName(): string { return 'logo'; }
+
+        static getWAV(): string { return require('assets/audio/logo.wav'); }
+    }
+    export class AudioNintendo {
+        static getName(): string { return 'nintendo'; }
+
+        static getWAV(): string { return require('assets/audio/nintendo.wav'); }
+    }
+    export class AudioShoot {
+        static getName(): string { return 'shoot'; }
+
+        static getWAV(): string { return require('assets/audio/shoot.wav'); }
+    }
+    export class AudioStart {
+        static getName(): string { return 'start'; }
+
+        static getWAV(): string { return require('assets/audio/start.wav'); }
+    }
+    export class AudioWin {
+        static getName(): string { return 'win'; }
+
+        static getWAV(): string { return require('assets/audio/win.wav'); }
     }
 }
 
@@ -414,31 +486,15 @@ export namespace GoogleWebFonts {
 }
 
 export namespace CustomWebFonts {
-    export class Fonts2DumbWebfont {
-        static getName(): string { return '2Dumb-webfont'; }
-
-        static getFamily(): string { return '2dumbregular'; }
-
-        static getCSS(): string { return require('!file-loader?name=assets/fonts/[name].[ext]!assets/fonts/2Dumb-webfont.css'); }
-        static getEOT(): string { return require('!file-loader?name=assets/fonts/[name].[ext]!assets/fonts/2Dumb-webfont.eot'); }
-        static getSVG(): string { return require('!file-loader?name=assets/fonts/[name].[ext]!assets/fonts/2Dumb-webfont.svg'); }
-        static getTTF(): string { return require('!file-loader?name=assets/fonts/[name].[ext]!assets/fonts/2Dumb-webfont.ttf'); }
-        static getWOFF(): string { return require('!file-loader?name=assets/fonts/[name].[ext]!assets/fonts/2Dumb-webfont.woff'); }
-    }
+    class IExistSoTypeScriptWillNotComplainAboutAnEmptyNamespace {}
 }
 
 export namespace BitmapFonts {
-    export class FontsFontFnt {
-        static getName(): string { return 'font_fnt'; }
+    export class FontsNokia {
+        static getName(): string { return 'nokia'; }
 
-        static getFNT(): string { return require('assets/fonts/font_fnt.fnt'); }
-        static getPNG(): string { return require('assets/fonts/font_fnt.png'); }
-    }
-    export class FontsFontXml {
-        static getName(): string { return 'font_xml'; }
-
-        static getPNG(): string { return require('assets/fonts/font_xml.png'); }
-        static getXML(): string { return require('assets/fonts/font_xml.xml'); }
+        static getFNT(): string { return require('assets/fonts/nokia.fnt'); }
+        static getPNG(): string { return require('assets/fonts/nokia.png'); }
     }
 }
 

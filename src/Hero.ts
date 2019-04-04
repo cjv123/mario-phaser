@@ -1,3 +1,4 @@
+import Game from "./states/game";
 
 enum Faceing{
     left=0,
@@ -128,6 +129,7 @@ export default class Hero {
         this._spriteFlayMan.animations.add("stand",[2,3],10);
 
 
+
         this.changeToMan();
 
         this.apply();
@@ -163,6 +165,7 @@ export default class Hero {
 
         this._spriteFlayMan.body.velocity.set(0);
         this.game.camera.follow(this._sprite);
+        this.game.camera.update();
 
         this._curStatus = HeroStatus.man;
     }
@@ -203,6 +206,20 @@ export default class Hero {
         return sprite;
     }
 
+    public updateExit(door:Phaser.Sprite){
+        if(this._upKey.isDown){
+            let curSprite = this.getCurSprite();
+            if(
+                curSprite.x<(door.x+door.width) &&
+                curSprite.x>door.x
+            ){
+                console.log("pass");
+                Game.curLevel++;
+                this.game.state.start("level");
+            }
+        }
+    }
+
     public update(){
         let body = this.getCurSprite().body;
 
@@ -214,10 +231,11 @@ export default class Hero {
         }
 
 
-        // let curSprite = this.getCurSprite();
-        // if(false == curSprite.inCamera && curSprite.body.velocity.y>0){
-        //     this.die();
-        // }
+        let curSprite = this.getCurSprite();
+        if(false == curSprite.inCamera && curSprite.body.velocity.y>0){
+            // this.die();
+            console.log("out camera");
+        }
 
         if(this._curStatus==HeroStatus.fly){
             this._spriteFlayMan.body.acceleration.y=0;
@@ -267,6 +285,7 @@ export default class Hero {
 
         if(this._bKey.justDown){
             if(this._hitWall || this._sprite.body.onFloor()){
+                this.game.sound.play("jump");
                 body.velocity.y = -this._jumpPower;
                 if(this._hitWall){
                     body.velocity.y = -this._jumpPower*2;
@@ -358,6 +377,19 @@ export default class Hero {
         // this._sprite.body.enable =false;
         this._sprite.animations.play("die");
         this._curStatus= HeroStatus.die;
+
+        let self=this;
+        this.game.time.events.add(2000,function(){
+            Game.life--;
+            if(Game.life<=0){
+                self.game.state.start("gameover");
+            }else{
+                self.game.state.start("level");
+            }
+        })
+
+        this.game.sound.stopAll();
+        this.game.sound.play("die");
     }
 
     public onHitLeftBlock(){
